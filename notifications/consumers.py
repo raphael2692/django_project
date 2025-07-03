@@ -19,4 +19,5 @@ class NotificationConsumer(WebsocketConsumer):
     def send_notification(self, event):
         # Sends the notification message to the WebSocket.
         message = event["message"]
+        print("message recieved", message)
         self.send(text_data=json.dumps({"message": message}))

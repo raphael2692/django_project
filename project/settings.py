@@ -194,7 +194,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # REDIS
 # ------------------------------------------------------------------------------
 # Host for Redis, used by Celery and Channels.
-# Defaults to localhost if not set in environment variables.
 REDIS_HOST = "redis"
 
 # ------------------------------------------------------------------------------

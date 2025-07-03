@@ -84,6 +84,10 @@
             + '/ws/notifications/'
         );
 
+        notificationSocket.onopen = function (e) {
+            console.log('Notification socket connected');
+        };
+
         notificationSocket.onmessage = function (e) {
             const data = JSON.parse(e.data);
             console.log('Notification received:', data.message);
