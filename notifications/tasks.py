@@ -1,25 +1,22 @@
-from asgiref.sync import async_to_sync
+# notifications/tasks.py
+from celery import shared_task
 from channels.layers import get_channel_layer
-from project.celery import app # Import the celery app
+from asgiref.sync import async_to_sync
 
-@app.task
-def send_login_notification(user_id, user_email):
+@shared_task
+def send_login_notification(user_id, message):
     """
-    Sends a notification to the user's channel group.
+    Sends a notification to a specific user's notification channel.
     """
-    message = f"Welcome back, {user_email}! You have successfully logged in (via Celery)."
-
-    # 1. Log to the Celery worker console
-    print(f"CELERY TASK (console): Sending notification to user {user_id}")
-
-    # 2. Send notification to the browser via Channels
     channel_layer = get_channel_layer()
-    group_name = f'notifications_{user_id}'
-
+    # The group name is now dynamically created based on the user's ID.
+    group_name = f"user_{user_id}_notifications"
+    
+    # The notification is sent to the user-specific group.
     async_to_sync(channel_layer.group_send)(
         group_name,
         {
-            'type': 'send.notification',
-            'message': message
-        }
+            "type": "send_notification",
+            "message": message,
+        },
     )

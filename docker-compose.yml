@@ -2,7 +2,21 @@ services:
   redis:
     image: redis:alpine
     ports:
-      - "127.0.0.1:6379:6379"
+      - "6379:6379"
+
+  django:
+    build: .
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    environment:
+      - DJANGO_DEBUG=True
 
   celery:
     build: .
@@ -11,6 +25,4 @@ services:
       - .:/app
     depends_on:
       - redis
-    # Add this environment section
-    environment:
-      - REDIS_HOST=redis
+      - django

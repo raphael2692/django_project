@@ -17,7 +17,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-l$p&ko&(z3=d-9
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 # A list of strings representing the host/domain names that this Django site can serve.
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "django"]
 
 # The entry point for the WSGI-compatible web servers to serve your project.
 WSGI_APPLICATION = 'project.wsgi.application'

@@ -51,7 +51,7 @@
 
             {% if user.is_authenticated %}
             <ul class="sidebar-nav mt-auto">
-                 <li>
+                <li>
                     <hr class="sidebar-divider">
                 </li>
                 <li class="nav-item">
@@ -78,27 +78,21 @@
         integrity="sha256-CDOy6cOibCWEdsRiZuaHf8dSGGJRYuBGC+mjoJimHGw=" crossorigin="anonymous"></script>
     {% if user.is_authenticated %}
     <script>
-        const socket = new WebSocket(
+        const notificationSocket = new WebSocket(
             'ws://'
             + window.location.host
             + '/ws/notifications/'
         );
-        socket.onopen = function (e) {
-            console.log("WebSocket connection established.");
+
+        notificationSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            console.log('Notification received:', data.message);
+            // Display the notification to the user
+            alert(data.message);
         };
-        socket.onmessage = function (event) {
-            const data = JSON.parse(event.data);
-            console.log("NOTIFICATION (browser): " + data.message);
-        };
-        socket.onclose = function (event) {
-            if (event.wasClean) {
-                console.log(`WebSocket connection closed cleanly, code=${event.code} reason=${event.reason}`);
-            } else {
-                console.error('WebSocket connection died');
-            }
-        };
-        socket.onerror = function (error) {
-            console.error(`WebSocket error: ${error.message}`);
+
+        notificationSocket.onclose = function (e) {
+            console.error('Notification socket closed unexpectedly');
         };
     </script>
     {% endif %}

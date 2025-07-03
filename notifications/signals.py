@@ -1,15 +1,13 @@
+# notifications/signals.py
+from django.contrib.auth.signals import user_logged_in
 from django.dispatch import receiver
-from allauth.account.signals import user_logged_in
-# Import the new task
-from notifications.tasks import send_login_notification
+from .tasks import send_login_notification
 
 @receiver(user_logged_in)
-def user_logged_in_receiver(request, user, **kwargs):
+def user_logged_in_handler(sender, request, user, **kwargs):
     """
-    Handles post-login signals by dispatching a Celery task.
+    When a user logs in, a Celery task is dispatched to send a notification.
     """
-    # Log to the Django console immediately
-    print(f"SIGNAL (console): User {user.email} logged in. Dispatching Celery task.")
-
-    # Call the Celery task to run in the background
-    send_login_notification.delay(user.id, user.email)
+    message = f"User {user.email} just logged in."
+    # The user's ID is passed to the Celery task.
+    send_login_notification.delay(user.id, message)

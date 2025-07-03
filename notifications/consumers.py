@@ -1,37 +1,22 @@
+# notifications/consumers.py
 import json
-from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.generic.websocket import WebsocketConsumer
 
-class NotificationConsumer(AsyncWebsocketConsumer):
-    async def connect(self):
-        # A user-specific group name. Users will only receive their own notifications.
+class NotificationConsumer(WebsocketConsumer):
+    def connect(self):
+        # A user-specific group name is created to send notifications only to that user.
         self.user = self.scope["user"]
-        if not self.user.is_authenticated:
-            await self.close()
-            return
-
-        self.group_name = f'notifications_{self.user.id}'
-
-        # Join room group
-        await self.channel_layer.group_add(
-            self.group_name,
-            self.channel_name
-        )
-
-        await self.accept()
-
-    async def disconnect(self, close_code):
-        # Leave room group
         if self.user.is_authenticated:
-            await self.channel_layer.group_discard(
-                self.group_name,
-                self.channel_name
-            )
+            self.group_name = f"user_{self.user.id}_notifications"
+            self.channel_layer.group_add(self.group_name, self.channel_name)
+            self.accept()
 
-    # This function will be called from our signal handler
-    async def send_notification(self, event):
-        message = event['message']
+    def disconnect(self, close_code):
+        # On disconnect, the user is removed from their specific group.
+        if hasattr(self, 'group_name'):
+            self.channel_layer.group_discard(self.group_name, self.channel_name)
 
-        # Send message to WebSocket
-        await self.send(text_data=json.dumps({
-            'message': message
-        }))
+    def send_notification(self, event):
+        # Sends the notification message to the WebSocket.
+        message = event["message"]
+        self.send(text_data=json.dumps({"message": message}))
