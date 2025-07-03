@@ -6,7 +6,7 @@ from channels.security.websocket import AllowedHostsOriginValidator
 from django.core.asgi import get_asgi_application
 
 # Import your routing configuration here
-import core.routing
+import notifications.routing
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
 
@@ -16,7 +16,7 @@ application = ProtocolTypeRouter({
     "http": django_asgi_app,
     "websocket": AllowedHostsOriginValidator(
         AuthMiddlewareStack(
-            URLRouter(core.routing.websocket_urlpatterns)
+            URLRouter(notifications.routing.websocket_urlpatterns)
         )
     ),
 })

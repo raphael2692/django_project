@@ -57,6 +57,7 @@ INSTALLED_APPS = [
 
     # Your Apps
     'core',
+    'notifications',
     'todo'
 ]
 

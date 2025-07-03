@@ -1,7 +1,7 @@
 from django.dispatch import receiver
 from allauth.account.signals import user_logged_in
 # Import the new task
-from .tasks import send_login_notification
+from notifications.tasks import send_login_notification
 
 @receiver(user_logged_in)
 def user_logged_in_receiver(request, user, **kwargs):
