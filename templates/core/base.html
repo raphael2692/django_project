@@ -14,6 +14,7 @@
             {% if user.is_authenticated %}
             <span>Hi, {{ user.email }}!</span>
             <a href="{% url 'account_logout' %}">Logout</a>
+            <a href="{% url 'todo:todo_list' %}">Todo Application</a>
             {% else %}
             <a href="{% url 'account_login' %}">Login</a>
             <a href="{% url 'account_signup' %}">Sign Up</a>

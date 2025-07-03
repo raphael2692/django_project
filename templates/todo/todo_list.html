@@ -1,0 +1,24 @@
+{% extends "core/base.html" %}
+
+{% block title %}Todo List{% endblock %}
+
+{% block content %}
+    <h1>Todo List</h1>
+    <a href="{% url 'todo:todo_create' %}">Create Todo</a>
+    <ul>
+        {% for todo in todos %}
+            <li>
+                {{ todo.title }}
+                {% if todo.assigned_to %}
+                    (Assigned to: {{ todo.assigned_to.username }})
+                {% endif %}
+                {% if user == todo.created_by %}
+                    <a href="{% url 'todo:todo_update' todo.pk %}">Edit</a>
+                    <a href="{% url 'todo:todo_delete' todo.pk %}">Delete</a>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>No todos yet.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

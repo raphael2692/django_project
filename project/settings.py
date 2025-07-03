@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     'allauth.account',
 
     # Your Apps
-    'core'
+    'core',
+    'todo'
 ]
 
 
