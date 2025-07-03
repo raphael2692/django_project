@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     # Third-Party Apps
     'allauth',
     'allauth.account',
+    'django_htmx',
 
     # Your Apps
     'core',
@@ -75,6 +76,7 @@ MIDDLEWARE = [
     
     # Third-Party Middleware
     'allauth.account.middleware.AccountMiddleware',
+    'django_htmx.middleware.HtmxMiddleware',
 ]
 
 
