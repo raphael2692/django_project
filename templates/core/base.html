@@ -76,30 +76,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha256-CDOy6cOibCWEdsRiZuaHf8dSGGJRYuBGC+mjoJimHGw=" crossorigin="anonymous"></script>
-    {% if user.is_authenticated %}
-    <script>
-        const notificationSocket = new WebSocket(
-            'ws://'
-            + window.location.host
-            + '/ws/notifications/'
-        );
-
-        notificationSocket.onopen = function (e) {
-            console.log('Notification socket connected');
-        };
-
-        notificationSocket.onmessage = function (e) {
-            const data = JSON.parse(e.data);
-            console.log('Notification received:', data.message);
-            // Display the notification to the user
-            alert(data.message);
-        };
-
-        notificationSocket.onclose = function (e) {
-            console.error('Notification socket closed unexpectedly');
-        };
-    </script>
-    {% endif %}
 </body>
 
 </html>
