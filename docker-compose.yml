@@ -1,8 +1,7 @@
 services:
   redis:
-    image: "redis:alpine"
+    image: redis:alpine
     ports:
-      # Expose Redis to your local machine
       - "6379:6379"
 
   celery:
@@ -12,8 +11,6 @@ services:
       - .:/app
     depends_on:
       - redis
+    # Add this environment section
     environment:
-      # These are now pointing to the redis service within the Docker network
-      - DJANGO_SETTINGS_MODULE=project.settings
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - REDIS_HOST=redis

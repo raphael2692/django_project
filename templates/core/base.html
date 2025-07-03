@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My Project{% endblock %}</title>
 </head>
+
 <body>
     <header>
         <nav>
             <a href="{% url 'core:home' %}">Home</a>
+            {% if user.is_authenticated %}
+            <span>Hi, {{ user.email }}!</span>
+            <a href="{% url 'account_logout' %}">Logout</a>
+            {% else %}
+            <a href="{% url 'account_login' %}">Login</a>
+            <a href="{% url 'account_signup' %}">Sign Up</a>
+            {% endif %}
         </nav>
     </header>
     <main>
@@ -18,5 +27,38 @@
     <footer>
         <p>&copy; 2025 My Project</p>
     </footer>
+
+    {% if user.is_authenticated %}
+    <script>
+        const socket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/notifications/'
+        );
+
+        socket.onopen = function (e) {
+            console.log("WebSocket connection established.");
+        };
+
+        socket.onmessage = function (event) {
+            const data = JSON.parse(event.data);
+            // Log the received message to the browser console
+            console.log("NOTIFICATION (browser): " + data.message);
+        };
+
+        socket.onclose = function (event) {
+            if (event.wasClean) {
+                console.log(`WebSocket connection closed cleanly, code=${event.code} reason=${event.reason}`);
+            } else {
+                console.error('WebSocket connection died');
+            }
+        };
+
+        socket.onerror = function (error) {
+            console.error(`WebSocket error: ${error.message}`);
+        };
+    </script>
+    {% endif %}
 </body>
+
 </html>
