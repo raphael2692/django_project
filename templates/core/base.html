@@ -4,6 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Pico.css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.1.1/css/pico.classless.min.css">
+
     <title>{% block title %}My Project{% endblock %}</title>
 </head>
 
@@ -12,9 +16,10 @@
         <nav>
             <a href="{% url 'core:home' %}">Home</a>
             {% if user.is_authenticated %}
-            <span>Hi, {{ user.email }}!</span>
-            <a href="{% url 'account_logout' %}">Logout</a>
             <a href="{% url 'todo:todo_list' %}">Todo Application</a>
+            <span>{{ user.email }}</span>
+            <a href="{% url 'account_logout' %}">Logout</a>
+   
             {% else %}
             <a href="{% url 'account_login' %}">Login</a>
             <a href="{% url 'account_signup' %}">Sign Up</a>
